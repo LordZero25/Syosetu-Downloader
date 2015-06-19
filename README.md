@@ -1,6 +1,7 @@
 # Syosetu-Downloader
 Download chapters from Syosetsu ni Narou
 
+
 Features:
 -support links with the pattern "http://*.syosetu.com/xxxxxxx"
 
@@ -10,6 +11,7 @@ Features:
 -option to specify a chapter range i.e. if you want to only download say chapters 3-10
 
 -this will download until it reaches an error page
+
 
 Notes:
 -if no chapter range is specified it will download everything
