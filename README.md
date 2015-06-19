@@ -13,3 +13,5 @@ Download chapters from Syosetsu ni Narou
 - no loading screen whatsoever (sorry for that)
 - "chapter 1" is "http://*.syosetu.com/xxxxxxx/1"
 - replaces illegal characters on filename with "□"
+
+**[Releases Here](https://github.com/LordZero25/Syosetu-Downloader/releases/)**
