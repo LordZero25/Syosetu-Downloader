@@ -10,6 +10,8 @@ Download chapters from Syosetsu ni Narou
 
 **Notes:**
 - If no chapter range is specified it will download everything
+- If "from" is blank it will start from chapter 1
+- If "to" is blank it will end on the latest/last chapter
 - No volume support
 - No loading screen whatsoever (sorry for that)
 - "chapter 1" is "http://*.syosetu.com/xxxxxxx/1"
