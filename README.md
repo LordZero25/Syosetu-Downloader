@@ -8,7 +8,7 @@ Download chapters from Syosetsu ni Narou
 - Option to specify a chapter range i.e. if you want to only download say chapters 3-10
 - This will download everything until it reaches an error page
 - Download mutiple series
-- 
+
 **Notes:**
 - If no chapter range is specified it will download everything
 - If "from" is blank it will start from chapter 1
