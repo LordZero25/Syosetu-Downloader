@@ -16,8 +16,11 @@ Download chapters from Syosetsu ni Narou
 - If "from" is blank it will start from chapter 1
 - If "to" is blank it will end on the latest/last chapter
 - No volume support
-- No loading screen whatsoever (sorry for that)
 - "chapter 1" is "http://*.syosetu.com/xxxxxxx/1"
 - Replaces illegal characters on filename with "□"
+
+**ToDo:**
+- Table of contents creation
+- User filename pattern
 
 **[Releases Here](https://github.com/LordZero25/Syosetu-Downloader/releases/)**
