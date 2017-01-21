@@ -25,12 +25,25 @@ namespace syosetuDownloader
         string _link = String.Empty;
         string _start = String.Empty;
         string _end = String.Empty;
+        string _format = String.Empty;
         Syousetsu.Constants.FileType _fileType;
         List<Syousetsu.Controls> _controls = new List<Syousetsu.Controls>();
 
         public MainWindow()
         {
             InitializeComponent();
+            using (System.IO.StreamReader sr = new System.IO.StreamReader("format.ini"))
+            {
+                string line;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    if (!line.StartsWith(";"))
+                    {
+                        _format = line;
+                        break;
+                    }
+                }
+            }
         }
 
         private void btnDownload_Click(object sender, RoutedEventArgs e)
@@ -46,7 +59,8 @@ namespace syosetuDownloader
                 if (!_link.StartsWith("http")) { _link = @"http://" + _link; }
                 if (!_link.EndsWith("/")) { _link = _link + "/"; }
 
-                HtmlDocument toc = Syousetsu.Methods.GetTableOfContents(_link);
+                Syousetsu.Constants sc = new Syousetsu.Constants();
+                HtmlDocument toc = Syousetsu.Methods.GetTableOfContents(_link, sc.SyousetsuCookie);
                 if (Syousetsu.Methods.IsValidLink(_link) &&
                     Syousetsu.Methods.IsValid(toc))
                 {
@@ -55,20 +69,20 @@ namespace syosetuDownloader
                     lb.ToolTip = "Click to open folder";
 
                     ProgressBar pb = new ProgressBar();
-                    pb.Maximum = Syousetsu.Methods.GetTotalChapters(toc);
+                    pb.Maximum = (_end == String.Empty) ? Syousetsu.Methods.GetTotalChapters(toc) : Convert.ToDouble(_end);
                     pb.ToolTip = "Click to stop download";
                     pb.Height = 10;
 
                     Separator s = new Separator();
                     s.Height = 5;
 
-                    Syousetsu.Constants sc = new Syousetsu.Constants();
                     sc.Title = lb.Content.ToString();
                     sc.Link = _link;
                     sc.Start = _start;
                     sc.End = _end;
                     sc.CurrentFileType = _fileType;
                     sc.SeriesCode = Syousetsu.Methods.GetSeriesCode(_link);
+                    sc.FilenameFormat = _format;
 
                     System.Threading.CancellationTokenSource ct = Syousetsu.Methods.AddDownloadJob(sc, pb);
                     pb.MouseDown += (snt, evt) =>

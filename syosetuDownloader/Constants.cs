@@ -30,6 +30,7 @@ namespace Syousetsu
         string _path = String.Empty;
         string _link = String.Empty;
         string _seriesCode = String.Empty;
+        private string _fileNameFormat = String.Empty;
 
         public CookieContainer SyousetsuCookie
         {
@@ -86,6 +87,12 @@ namespace Syousetsu
         {
             get { return _seriesCode; }
             set { _seriesCode = value; }
+        }
+
+        public string FilenameFormat
+        {
+            get { return _fileNameFormat; }
+            set { _fileNameFormat = value; }
         }
     }
 }
