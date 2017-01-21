@@ -1,7 +1,6 @@
 # Syosetu-Downloader
 Download chapters from Syosetsu ni Narou
 
-
 **Features:**
 - Support links with the pattern "http://*.syosetu.com/xxxxxxx"
 - Downloaded chapters are on .exe folder/[novel name]
