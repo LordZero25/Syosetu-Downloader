@@ -4,12 +4,12 @@ Download chapters from Syosetsu ni Narou
 
 **Features:**
 - Support links with the pattern "http://*.syosetu.com/xxxxxxx"
-- Downloaded chapters are on .exe folder/[novel name]/Chapter [num] - [chapter name].txt ([num]=incrementing number | [novel name] and [chapter name] are on japanese)
+- Downloaded chapters are on .exe folder/[novel name]
 - Option to specify a chapter range i.e. if you want to only download say chapters 3-10
-- This will download everything until it reaches an error page
 - Download mutiple series
 - Clicking the progress bar will cancel the download job
 - Clicking the novel title will open it download folder
+- Custom filename (see format.ini for details)
 
 **Notes:**
 - If no chapter range is specified it will download everything
@@ -21,6 +21,5 @@ Download chapters from Syosetsu ni Narou
 
 **ToDo:**
 - Table of contents creation
-- User filename pattern
 
 **[Releases Here](https://github.com/LordZero25/Syosetu-Downloader/releases/)**
