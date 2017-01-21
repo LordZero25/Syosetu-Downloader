@@ -27,12 +27,12 @@ namespace Syousetsu
             else if (details.Start == String.Empty && details.End != String.Empty)//determine if user wants to end at a specific chapter
             {
                 i = 1;
-                upTo = Convert.ToInt32(details.End);
+                upTo = max;
             }
             else if (details.Start != String.Empty && details.End != String.Empty)//determine if user only wants to download a specifc range
             {
                 i = Convert.ToInt32(details.Start);//get start of the range
-                upTo = Convert.ToInt32(details.End);//get the end of the range
+                upTo = max;//get the end of the range
             }
             else
             {
@@ -44,8 +44,8 @@ namespace Syousetsu
             {
                 for (int ctr = i; ctr <= max; ctr++)
                 {
-                    string subLink = String.Format("{0}{1}", details.Link, ctr);
-                    string[] chapter = Create.GenerateContents(details, GetPage(subLink,details.SyousetsuCookie) ,ctr);
+                    string subLink = details.Link + ctr;
+                    string[] chapter = Create.GenerateContents(details, GetPage(subLink, details.SyousetsuCookie), ctr);
                     Create.SaveFile(details, chapter, ctr);
 
                     pb.Dispatcher.Invoke((Action)(() => { pb.Value = ctr; }));
@@ -60,16 +60,20 @@ namespace Syousetsu
                         break;
                     }
                 }
-                pb.Dispatcher.Invoke((Action)(() => { pb.Value = max; }));
+                pb.Dispatcher.Invoke((Action)(() => { 
+                    pb.Value = max;
+                    pb.ToolTip = "";
+                }));
             }, ct.Token);
 
             return ct;
         }
 
-        public static HtmlDocument GetTableOfContents(string link)
+        public static HtmlDocument GetTableOfContents(string link, CookieContainer cookies)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(link);
             request.Method = "GET";
+            request.CookieContainer = cookies;
 
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             var stream = response.GetResponseStream();
@@ -245,18 +249,17 @@ namespace Syousetsu
             chapter[0] = r.Replace(chapter[0], "□");
 
             //save the chapter
+            string fileName = details.FilenameFormat;
             if (details.CurrentFileType == Constants.FileType.Text)
             {
-                string fileName = String.Format("Chapter {0} - {1}.txt", current, chapter[0]);
-                fileName = Path.Combine(path, fileName); //String.Format(@"{0}{3}Chapter {1} - {2}.txt", path, current, chapter[0], System.IO.Path.DirectorySeparatorChar);
-                File.WriteAllLines(fileName, chapter, Encoding.Unicode);
+                fileName = String.Format(fileName + ".txt", current, chapter[0]);
             }
             else if (details.CurrentFileType == Constants.FileType.HTML)
             {
-                string fileName = String.Format("Chapter {0} - {1}.htm", current, chapter[0]);
-                fileName = Path.Combine(path, fileName);//String.Format(@"{0}{3}Chapter {1} - {2}.htm", path, current, chapter[0], System.IO.Path.DirectorySeparatorChar);
-                File.WriteAllText(fileName, chapter[1], Encoding.Unicode);
+                fileName = String.Format(fileName + ".htm", current, chapter[0]);
             }
+            fileName = Path.Combine(path, fileName);
+            File.WriteAllLines(fileName, chapter, Encoding.Unicode);
         }
     }
 }
