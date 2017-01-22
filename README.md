@@ -7,8 +7,9 @@ Download chapters from Syosetsu ni Narou
 - Option to specify a chapter range i.e. if you want to only download say chapters 3-10
 - Download mutiple series
 - Clicking the progress bar will cancel the download job
-- Clicking the novel title will open it download folder
+- Clicking the novel title will open its download folder
 - Custom filename (see format.ini for details)
+- Chapter list generation (nxxxxxx.htm)
 
 **Notes:**
 - If no chapter range is specified it will download everything
@@ -17,8 +18,6 @@ Download chapters from Syosetsu ni Narou
 - No volume support
 - "chapter 1" is "http://*.syosetu.com/xxxxxxx/1"
 - Replaces illegal characters on filename with "□"
-
-**ToDo:**
-- Table of contents creation
+- No chapter list generation for wayback machine
 
 **[Releases Here](https://github.com/LordZero25/Syosetu-Downloader/releases/)**

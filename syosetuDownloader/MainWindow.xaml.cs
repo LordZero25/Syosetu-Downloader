@@ -48,63 +48,87 @@ namespace syosetuDownloader
 
         private void btnDownload_Click(object sender, RoutedEventArgs e)
         {
-            _row += 1;
-
             this._link = txtLink.Text;
             this._start = txtFrom.Text;
             this._end = txtTo.Text;
 
-            if (_link != String.Empty)
+            bool fromToValid = (System.Text.RegularExpressions.Regex.IsMatch(_start, @"^\d+$") || _start.Equals(String.Empty)) &&
+                (System.Text.RegularExpressions.Regex.IsMatch(_end, @"^\d+$") || _end.Equals(String.Empty));
+            if (_link != String.Empty && fromToValid)
             {
                 if (!_link.StartsWith("http")) { _link = @"http://" + _link; }
                 if (!_link.EndsWith("/")) { _link = _link + "/"; }
 
-                Syousetsu.Constants sc = new Syousetsu.Constants();
-                HtmlDocument toc = Syousetsu.Methods.GetTableOfContents(_link, sc.SyousetsuCookie);
-                if (Syousetsu.Methods.IsValidLink(_link) &&
-                    Syousetsu.Methods.IsValid(toc))
+                if (Syousetsu.Methods.IsValidLink(_link))
                 {
-                    Label lb = new Label();
-                    lb.Content = Syousetsu.Methods.GetTitle(toc);
-                    lb.ToolTip = "Click to open folder";
+                    Syousetsu.Constants sc = new Syousetsu.Constants();
+                    sc.ChapterTitle.Add("");
+                    HtmlDocument toc = Syousetsu.Methods.GetTableOfContents(_link, sc.SyousetsuCookie);
 
-                    ProgressBar pb = new ProgressBar();
-                    pb.Maximum = (_end == String.Empty) ? Syousetsu.Methods.GetTotalChapters(toc) : Convert.ToDouble(_end);
-                    pb.ToolTip = "Click to stop download";
-                    pb.Height = 10;
-
-                    Separator s = new Separator();
-                    s.Height = 5;
-
-                    sc.Title = lb.Content.ToString();
-                    sc.Link = _link;
-                    sc.Start = _start;
-                    sc.End = _end;
-                    sc.CurrentFileType = _fileType;
-                    sc.SeriesCode = Syousetsu.Methods.GetSeriesCode(_link);
-                    sc.FilenameFormat = _format;
-
-                    System.Threading.CancellationTokenSource ct = Syousetsu.Methods.AddDownloadJob(sc, pb);
-                    pb.MouseDown += (snt, evt) =>
+                    if (Syousetsu.Methods.IsValid(toc))
                     {
-                        ct.Cancel();
-                        pb.ToolTip = "";
-                    };
-                    lb.MouseDown += (snt, evt) =>
-                    {
-                        string path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), sc.Title);
-                        if (System.IO.Directory.Exists(path))
+                        _row += 1;
+
+                        Label lb = new Label();
+                        lb.Content = Syousetsu.Methods.GetTitle(toc);
+                        lb.ToolTip = "Click to open folder";
+
+                        ProgressBar pb = new ProgressBar();
+                        pb.Maximum = (_end == String.Empty) ? Syousetsu.Methods.GetTotalChapters(toc) : Convert.ToDouble(_end);
+                        pb.ToolTip = "Click to stop download";
+                        pb.Height = 10;
+
+                        Separator s = new Separator();
+                        s.Height = 5;
+
+                        sc.SeriesTitle = lb.Content.ToString();
+                        sc.Link = _link;
+                        sc.Start = _start;
+                        sc.End = _end;
+                        sc.CurrentFileType = _fileType;
+                        sc.SeriesCode = Syousetsu.Methods.GetSeriesCode(_link);
+                        sc.FilenameFormat = _format;
+                        Syousetsu.Methods.GetAllChapterTitles(sc, toc);
+
+                        if (chkList.IsChecked == true)
                         {
-                            System.Diagnostics.Process.Start("explorer.exe", path);
+                            Syousetsu.Create.GenerateTableOfContents(sc, toc);
                         }
-                    };
 
-                    stackPanel1.Children.Add(lb);
-                    stackPanel1.Children.Add(pb);
-                    stackPanel1.Children.Add(s);
+                        System.Threading.CancellationTokenSource ct = Syousetsu.Methods.AddDownloadJob(sc, pb);
+                        pb.MouseDown += (snt, evt) =>
+                        {
+                            ct.Cancel();
+                            pb.ToolTip = null;
+                        };
+                        lb.MouseDown += (snt, evt) =>
+                        {
+                            string path = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), sc.SeriesTitle);
+                            if (System.IO.Directory.Exists(path))
+                            {
+                                System.Diagnostics.Process.Start("explorer.exe", path);
+                            }
+                        };
 
-                    _controls.Add(new Syousetsu.Controls { ID = _row, Label = lb, ProgressBar = pb, Separator = s });
+                        stackPanel1.Children.Add(lb);
+                        stackPanel1.Children.Add(pb);
+                        stackPanel1.Children.Add(s);
+
+                        _controls.Add(new Syousetsu.Controls { ID = _row, Label = lb, ProgressBar = pb, Separator = s });
+                    }
+                    else
+                    {
+                        MessageBox.Show("Link not valid!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
+                else
+                {
+                    MessageBox.Show("Link not valid!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Error parsing link and/or chapter range!", "", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

@@ -31,6 +31,7 @@ namespace Syousetsu
         string _link = String.Empty;
         string _seriesCode = String.Empty;
         private string _fileNameFormat = String.Empty;
+        private List<string> chapterTitle = new List<string>();
 
         public CookieContainer SyousetsuCookie
         {
@@ -46,7 +47,7 @@ namespace Syousetsu
             }
         }
 
-        public string Title
+        public string SeriesTitle
         {
             get { return _title; }
             set { _title = value; }
@@ -93,6 +94,12 @@ namespace Syousetsu
         {
             get { return _fileNameFormat; }
             set { _fileNameFormat = value; }
+        }
+
+        public List<string> ChapterTitle
+        {
+            get { return chapterTitle; }
+            set { chapterTitle = value; }
         }
     }
 }
