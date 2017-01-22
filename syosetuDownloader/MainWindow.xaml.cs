@@ -32,6 +32,10 @@ namespace syosetuDownloader
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        public void GetFilenameFormat()
+        {
             using (System.IO.StreamReader sr = new System.IO.StreamReader("format.ini"))
             {
                 string line;
@@ -67,6 +71,7 @@ namespace syosetuDownloader
 
                     if (Syousetsu.Methods.IsValid(toc))
                     {
+                        GetFilenameFormat();
                         _row += 1;
 
                         Label lb = new Label();
@@ -80,6 +85,9 @@ namespace syosetuDownloader
 
                         Separator s = new Separator();
                         s.Height = 5;
+
+                        _start = (_start == String.Empty) ? "1" : _start;
+                        _end = pb.Maximum.ToString();
 
                         sc.SeriesTitle = lb.Content.ToString();
                         sc.Link = _link;
