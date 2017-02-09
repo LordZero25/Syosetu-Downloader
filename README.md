@@ -1,10 +1,13 @@
 # Syosetu-Downloader
 Download chapters from Syosetsu ni Narou
 
+**Requirements**
+- .Net Framework 4.0
+
 **Features:**
 - Support links with the pattern "http://*.syosetu.com/xxxxxxx"
 - Downloaded chapters are on .exe folder/[novel name]
-- Option to specify a chapter range i.e. if you want to only download say chapters 3-10
+- Option to specify a chapter range (i.e. if you want to only download say chapters 3-10)
 - Download mutiple series
 - Clicking the progress bar will cancel the download job
 - Clicking the novel title will open its download folder
