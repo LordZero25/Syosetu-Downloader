@@ -291,7 +291,7 @@ namespace Syousetsu
             HtmlNodeCollection cssNodeList = doc.DocumentNode.SelectNodes("//link[@rel='stylesheet']");
 
             var cssNode = (from n in cssNodeList
-                           where n.Attributes["href"].Value.Contains("syosetu")
+                           where n.Attributes["href"].Value.Contains("ncout.css")
                            select n).ToList();
 
             //get css link and download
