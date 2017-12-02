@@ -14,6 +14,14 @@ Download chapters from Syosetsu ni Narou
 - Custom filename (see format.ini for details)
 - Chapter list generation (nxxxxxx.htm)
 
+**CMD Commands**
+- -l, --link      URL to be processed
+- -s, --start     (Default: 1) Stating chapter
+- -e, --end       Ending chapter
+- -f, --format    (Default: TXT) File format (HTML | TXT)
+- -t, --toc       (Default: False) Generates Table of contents
+- -h, --help      
+
 **Notes:**
 - If no chapter range is specified it will download everything
 - If "from" is blank it will start from chapter 1
