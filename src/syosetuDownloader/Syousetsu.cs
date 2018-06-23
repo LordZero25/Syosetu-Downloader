@@ -142,9 +142,17 @@ namespace Syousetsu
         public static string GetNovelBody(HtmlDocument doc, Constants.FileType fileType)
         {
             HtmlNode novelNode = doc.DocumentNode.SelectSingleNode("//div[@id='novel_honbun']");
+            HtmlNode footerNode = doc.DocumentNode.SelectSingleNode("//div[@id='novel_a']");
             if (fileType == Constants.FileType.Text)
             {
-                return novelNode.InnerText;
+                string s = novelNode.InnerText;
+                if (footerNode != null)
+                {
+                    s += Environment.NewLine + "=====" + Environment.NewLine;
+                    s += footerNode.InnerText;
+                }
+
+                return s;
             }
             else if (fileType == Constants.FileType.HTML)
             {
@@ -153,9 +161,22 @@ namespace Syousetsu
                 StringBuilder sb = new StringBuilder();
                 foreach (String str in s)
                 {
-                    string temp = (str != "") ? ("<p>" + str + "</p>\n") : ("<p><br/></p>\n");
-                    sb.Append(temp);
+                    string temp = (str != "") ? ("<p>" + str + "</p>") : ("<p><br/></p>");
+                    sb.AppendLine(temp);
                 }
+
+                if (footerNode != null)
+                {
+                    sb.AppendLine("<hr/>");
+
+                    s = footerNode.InnerText.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+                    foreach (String str in s)
+                    {
+                        string temp = (str != "") ? ("<p>" + str + "</p>") : ("<p><br/></p>");
+                        sb.AppendLine(temp);
+                    }
+                }
+
                 return sb.ToString();
             }
             return String.Empty;
@@ -285,7 +306,7 @@ namespace Syousetsu
                 if (doc.DocumentNode.SelectSingleNode("//div[@id='novel_honbun']").InnerHtml.Contains("<img"))
                 {
                     string subLink = String.Format("{0}{1}", details.Link, current);
-                    chapter[1] += String.Format("\n\n===\n\nContains image(s): {0}\n\n===", subLink);
+                    chapter[1] += String.Format("\n\n===\n\n<a href=\"{0}\">Contains image(s)</a>\n\n===", subLink);
                 }
             }
             return chapter;
@@ -409,8 +430,8 @@ namespace Syousetsu
                 temp = temp.Take(temp.Length - 1).ToArray();
                 string tempFormat = (temp.Length > 1) ? String.Join("\\", temp) : temp[0];
 
-                path = Path.Combine(new string[] { 
-                    Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), 
+                path = Path.Combine(new string[] {
+                    Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
                     details.SeriesTitle,
                     String.Format(tempFormat, new object[]{ 0, details.ChapterTitle[0], details.SeriesCode})
                 });
@@ -434,8 +455,8 @@ namespace Syousetsu
                 temp = temp.Take(temp.Length - 1).ToArray();
                 string tempFormat = (temp.Length > 1) ? String.Join("\\", temp) : temp[0];
 
-                path = Path.Combine(new string[] { 
-                    Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), 
+                path = Path.Combine(new string[] {
+                    Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
                     details.SeriesTitle,
                     String.Format(tempFormat, new object[]{ current, details.ChapterTitle[current], details.SeriesCode})
                 });

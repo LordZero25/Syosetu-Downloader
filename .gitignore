@@ -3,3 +3,5 @@
 ################################################################################
 
 /src/syosetuDownloader/bin
+/src/syosetuDownloader/obj/x86
+/src/.vs
