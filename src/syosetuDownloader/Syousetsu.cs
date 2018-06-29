@@ -232,6 +232,30 @@ namespace Syousetsu
             }
         }
 
+        public static string GetNovelHeader(HtmlDocument doc, Constants.FileType fileType)
+        {
+            HtmlNode headerNode = doc.DocumentNode.SelectSingleNode("//div[@id='novel_p']");
+            if (fileType == Constants.FileType.Text)
+            {
+                string s = headerNode.InnerText;
+                s += Environment.NewLine + "=====" + Environment.NewLine;
+                return s;
+            }
+            else if (fileType == Constants.FileType.HTML)
+            {
+                string[] s = headerNode.InnerText.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+
+                StringBuilder sb = new StringBuilder();
+                foreach (String str in s)
+                {
+                    string temp = (str != "") ? ("<p>" + str + "</p>") : ("<p><br/></p>");
+                    sb.AppendLine(temp);
+                }
+            }
+
+            return String.Empty;
+        }
+
         public static bool IsValid(HtmlDocument doc)
         {
             return (GetTitle(doc) != "エラー") ? true : false;
