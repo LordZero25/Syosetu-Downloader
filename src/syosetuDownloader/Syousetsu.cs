@@ -235,6 +235,8 @@ namespace Syousetsu
         public static string GetNovelHeader(HtmlDocument doc, Constants.FileType fileType)
         {
             HtmlNode headerNode = doc.DocumentNode.SelectSingleNode("//div[@id='novel_p']");
+            if (headerNode == null) { return String.Empty; }
+
             if (fileType == Constants.FileType.Text)
             {
                 string s = headerNode.InnerText;
@@ -255,9 +257,10 @@ namespace Syousetsu
                 sb.AppendLine("<hr/>");
 
                 return sb.ToString();
+            }else
+            {
+                return String.Empty;
             }
-
-            return String.Empty;
         }
 
         public static bool IsValid(HtmlDocument doc)
