@@ -251,6 +251,10 @@ namespace Syousetsu
                     string temp = (str != "") ? ("<p>" + str + "</p>") : ("<p><br/></p>");
                     sb.AppendLine(temp);
                 }
+
+                sb.AppendLine("<hr/>");
+
+                return sb.ToString();
             }
 
             return String.Empty;
