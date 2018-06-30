@@ -239,8 +239,8 @@ namespace Syousetsu
 
             if (fileType == Constants.FileType.Text)
             {
-                string s = headerNode.InnerText;
-                s += Environment.NewLine + "=====" + Environment.NewLine;
+                string s = headerNode.InnerText.Trim(Environment.NewLine.ToCharArray());
+                s += Environment.NewLine + Environment.NewLine + "=====" + Environment.NewLine + Environment.NewLine;
                 return s;
             }
             else if (fileType == Constants.FileType.HTML)
@@ -257,7 +257,8 @@ namespace Syousetsu
                 sb.AppendLine("<hr/>");
 
                 return sb.ToString();
-            }else
+            }
+            else
             {
                 return String.Empty;
             }
@@ -311,7 +312,9 @@ namespace Syousetsu
             if (details.CurrentFileType == Constants.FileType.Text)
             {
                 chapter[0] = Methods.GetChapterTitle(doc).TrimStart().TrimEnd();
-                chapter[1] = Methods.GetNovelBody(doc, details.CurrentFileType);
+                chapter[1] = Methods.GetNovelHeader(doc, details.CurrentFileType);
+                chapter[1] += chapter[0];
+                chapter[1] += Methods.GetNovelBody(doc, details.CurrentFileType);
 
                 if (doc.DocumentNode.SelectSingleNode("//div[@id='novel_honbun']").InnerHtml.Contains("<img"))
                 {
@@ -330,7 +333,8 @@ namespace Syousetsu
                 chapter[1] += "\t<title></title>\n";
                 chapter[1] += "\t<link href=\"ChapterStyle.css\" rel=\"stylesheet\" type=\"text/css\" />\n";
                 chapter[1] += "</head>\n";
-                chapter[1] += "<body>\n";
+                chapter[1] += "<body>\n ";
+                chapter[1] += Methods.GetNovelHeader(doc, details.CurrentFileType);
                 chapter[1] += "\n<h2>" + chapter[0] + "</h2>\n\n";
                 chapter[1] += Methods.GetNovelBody(doc, details.CurrentFileType);
 
@@ -364,10 +368,11 @@ namespace Syousetsu
             {
                 fileName = String.Format(fileName + ".htm",
                     new object[] { current, chapter[0], details.SeriesCode });
-                chapter[0] = String.Empty;
 
                 File.WriteAllText(Path.Combine(path, "ChapterStyle.css"), "/*chapter css here*/");
             }
+
+            chapter[0] = String.Empty;
             fileName = Path.Combine(path, fileName);
             File.WriteAllLines(fileName, chapter, Encoding.Unicode);
         }
