@@ -369,7 +369,7 @@ namespace Syousetsu
                 fileName = String.Format(fileName + ".htm",
                     new object[] { current, chapter[0], details.SeriesCode });
 
-                File.WriteAllText(Path.Combine(path, "ChapterStyle.css"), "/*chapter css here*/");
+                File.WriteAllText(Path.Combine(path, "ChapterStyle.css"), "@charset \"UTF - 8\";\n/*chapter css here*/");
             }
 
             chapter[0] = String.Empty;
